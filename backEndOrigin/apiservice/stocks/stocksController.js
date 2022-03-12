@@ -102,7 +102,6 @@ const update = async (req, res) => {
             {
                 data: 0,
                 status: 400
-
             }
         );
     }
