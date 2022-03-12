@@ -1,6 +1,3 @@
-const jwt = require('jsonwebtoken');
-
-
 const single = (resource, authUser) => (
   {
     id_user: resource.id_user,
@@ -11,7 +8,7 @@ const single = (resource, authUser) => (
 const singles = async (resource) => {
 
   const rest = await resource.map((item) => {
-    delete item.password
+
     return item
   }
   )
@@ -22,45 +19,30 @@ const singles = async (resource) => {
 
 const register = async (resource) => {
 
-  const data = resource;
-  // console.log(rest)
-  const rest = await data.map((item) => {
-    delete item.password
-    return item
-  }
-
-  )
-
-  const token = jwt.sign({
-    id_user: rest[0].id_user,
-    fullname: rest[0].fullname,
-    email: rest[0].email,
-   
-  }, process.env.TOKEN_SECRET)
-
-  const element = { token, rest, error: null }
-
-  return element
-}
-
-
-const login = async (resource) => {
   const data = resource[0]
   const rest = await data.map((item) => {
     delete item.password
     return item
   }
   )
-  const token = jwt.sign({
-    id_user: rest[0].id_user,
-    fullname: rest[0].fullname,
-    email: rest[0].email,
-  }, process.env.TOKEN_SECRET)
 
-  const element = { token, rest, error: null }
-
-  return element
+  return rest
 }
+
+
+const login = async (resource) => {
+
+  const data = resource[0]
+  const rest = await data.map((item) => {
+    delete item.password
+    return item
+  }
+  )
+
+  return rest
+}
+
+
 
 module.exports = {
   single,

@@ -33,7 +33,7 @@ const login = async (req, res) => {
 
 
 const register = async (req, res) => {
-    const { fullname, password, email, id_rol } = req.body
+    const { fullname, password, email} = req.body
     const userCreate = req.body
     const user = await userModel.register(userCreate);
     const userRow = await userDto.register(user)

@@ -11,7 +11,7 @@ const register = async (elemento) => {
   const email = elemento.email;
   const password = elemento.password;
   // const id_rol = elemento.id_rol
-  const id_rol = 2
+ 
 
 
   const resultados = userss.filter(u => u.email === email)
@@ -25,9 +25,9 @@ const register = async (elemento) => {
     )
   } else {
     const hashedPassword = await bcrypt.hash(password, 10)
-    const newUser = { email, fullname, hashedPassword, id_rol }
+    const newUser = { email, fullname, hashedPassword }
     const saveRegister = await usersDao.RegisterPost(newUser)
-    const data = { email, fullname, id_rol }
+    const data = { email, fullname}
     const u = await usersDao.getUserR(email)
     users.push(u)
   }
