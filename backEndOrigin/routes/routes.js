@@ -22,6 +22,7 @@ router.use('/stocks', stocks);
 
 
 router.use('/users', users);
+
 router.use('/budgets', auths, budgets);
 
 // router.post("/welcome", auths, (req, res) => {
