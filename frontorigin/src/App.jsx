@@ -53,7 +53,7 @@ function App() {
 
                 
               <Router>
-                <Navbar />
+                {/* <Navbar /> */}
                 <Switch>
                   <Route exact path="/" component={Tabla} />
                   {/* <Route path="/boudgetsForm" component={Form} /> */}

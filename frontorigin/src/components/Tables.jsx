@@ -32,7 +32,7 @@ const Tables = (props) => {
                             props.con?.map(item =>
                                 <tr key={item.id_action}>
                                     <th scope="row">{item.id_action}</th>
-                                    <td><Link to="/grafic"> {item.symbol}</Link></td>
+                                    <td><Link to={`/grafic/${item.id_action}`}> {item.symbol}</Link></td>
                                     <td>{item.name_action}</td>
                                     <td>{item.coin}</td>
                                     <td><div className="btn btn-primary">

@@ -7,6 +7,7 @@ import { getUserActionn, showBoudgetsActionn } from '../features/Redux/stocksDuc
 import Creatable from 'react-select/creatable';
 import AsyncSelect from "react-select/async";
 import Tables from './Tables';
+import { Row, Col } from 'antd';
 
 
 
@@ -18,6 +19,7 @@ import {
   Link
 } from "react-router-dom";
 import Grafic from './Grafic';
+import Navbar from './Navbar';
 
 
 const aquaticCreatures = [
@@ -173,13 +175,23 @@ const Table = () => {
 
       <div className="container">
 
-
         <Router>
           <Route path="/" exact>
+            <Row ustify="space-around" align="middle">
+
+              <Col span={4}>
+                <Navbar />
+                <div className="btn btn-info">
+                  agregar
+                </div>
+                <AsyncSelect cacheOptions loadOptions={loadOptions} onChange={handleChange} />
+              </Col>
+       
+            </Row>
             <Tables con={stocks.array.con} />
 
           </Route>
-          <Route path="/grafic" >
+          <Route path="/grafic/:id" >
             <Grafic con={stocks.array.con} />
 
           </Route>
@@ -187,7 +199,6 @@ const Table = () => {
 
 
 
-        <AsyncSelect cacheOptions loadOptions={loadOptions} onChange={handleChange} />
         {/* <Tables con={stocks.array.con} /> */}
 
       </div>
