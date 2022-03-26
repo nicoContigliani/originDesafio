@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const config = {
     key: "24cd58bee7e947968aa105119b8d87e5",
-  };
+};
 
 
 
@@ -41,6 +41,14 @@ const BOUDGETS_SHOW_SUCCESS = "BOUDGETS_SHOW_SUCCESS";
 const BOUDGETS_SHOW_ERROR = "BOUDGETS_SHOW_ERROR";
 const ORDER_BY_BOUDGETS_SHOW_SUCCESS = "ORDER_BY_BOUDGETS_SHOW_SUCCESS"
 
+
+const ACTIONS_CREATE_SUCCESS = "ACTIONS_CREATE_SUCCESS";
+const ACTIONS_CREATE_ERROR = "ACTIONS_CREATE_ERROR";
+
+const ACTIONS_DELETE_SUCCESS = "ACTIONS_DELETE_SUCCESS";
+const ACTIONS_DELETE_ERROR = "ACTIONS_DELETE_ERROR";
+
+
 //Reducer
 export default function stocksReducer(state = dataInitial, action) {
     switch (action.type) {
@@ -74,7 +82,7 @@ export default function stocksReducer(state = dataInitial, action) {
         case BOUDGETS_CREATE_ERROR:
             return { ...state }
 
-        case BOUDGETS_DELETE_SUCCESS:
+        case ACTIONS_DELETE_SUCCESS:
             return { ...state, array: action.payload };
         case BOUDGETS_DELETE_ERRROR:
             return { ...state }
@@ -145,16 +153,16 @@ export const showBoudgetsActionn = (valor) => async (dispatch, getState) => {
         },
         );
 
-// const dataFechtStocksAll = dataFechtStocks.data.data.map(item=>({[...item],{'label':item.name}}))
+        // const dataFechtStocksAll = dataFechtStocks.data.data.map(item=>({[...item],{'label':item.name}}))
 
-const all = dataFechtStocks.data.data
-const dataFechtStocksAll = all.map(element=>element.name !==undefined? {...element, label:element.symbol }:element);
+        const all = dataFechtStocks.data.data
+        const dataFechtStocksAll = all.map(element => element.name !== undefined ? { ...element, label: element.symbol } : element);
 
-        console.log("esto viene de  la api externa",dataFechtStocks.data.data,"......149......")
+        console.log("esto viene de  la api externa", dataFechtStocks.data.data, "......149......")
 
         const con = dataStocks.data.data;
         // const dataFechtStocksAll = dataFechtStocks.data.data;
-        const stocks = { con,dataFechtStocksAll ,fullname }
+        const stocks = { con, dataFechtStocksAll, fullname }
 
         // const stocks = { con ,fullname }
 
@@ -243,23 +251,16 @@ export const orderByBoudgetsAction = (valor) => async (dispatch, getState) => {
 
 }
 
-export const createBoudgetsActionn = (valor) => async (dispatch, getState) => {
+export const saveActionn = (valor) => async (dispatch, getState) => {
+
+
+    const name_action = valor.name_action;
+    const symbol = valor.symbol;
+    const coin = valor.coin;
 
 
 
-    const amount = valor.amount;
-    const concept = valor.concept;
-    const dateElement = valor.date;
-    const type = valor.type;
-
-    var event = new Date(dateElement);
-    let date = JSON.stringify(event)
-    date = date.slice(1, 11)
-    console.log(date)
-
-
-
-    console.log(new Date(valor.date).toUTCString(), "esto viene de valor")
+    // console.log(new Date(valor.date).toUTCString(), "esto viene de valor")
     if (localStorage.getItem('userSession')) {
         const userSession = JSON.parse(localStorage.getItem('userSession')
 
@@ -269,26 +270,15 @@ export const createBoudgetsActionn = (valor) => async (dispatch, getState) => {
         const token = userSession.token;
         // const url = `http://localhost:3001/api/budgets/${id_user}`
 
-        console.log(id_user, token)
-        // const dataBoudgets = await axios({
-        //     url: `http://localhost:3001/api/budgets/${id_user}?token=${token}`,
-        //     method: 'GET',
-        //     contentType: 'application/json',
+        console.log(id_user, token, "esto es de userSession")
 
-        //     success: function (response) {
-        //         // console.log(response);
-
-        //     }
-        // },
-        // );
-        // const dataBud = dataBoudgets.data;
-        console.log(concept, amount, date, id_user, type)
-        const dataBud = await axios({
-            url: `http://localhost:3001/api/budgets/?token=${token}`,
+        console.log(name_action, symbol, coin, id_user, "esto viene en 278")
+        const dataSave = await axios({
+            url: `http://localhost:3001/api/stocks/?token=${token}`,
             method: 'POST',
             contentType: 'application/json',
             // data: JSON.stringify({ ...user}),
-            data: { amount, concept, date, id_user, type, token },
+            data: { name_action, symbol, coin, id_user, token },
             success: function (response) {
                 console.log(response, "post en authducks");
                 // localStorage.setItem('userSession', JSON.stringify(response))
@@ -296,15 +286,14 @@ export const createBoudgetsActionn = (valor) => async (dispatch, getState) => {
             }
         });
 
-        console.log(dataBud)
-
+        // console.log(dataSave)
 
 
         try {
             dispatch({
-                type: BOUDGETS_CREATE_SUCCESS,
+                type: ACTIONS_CREATE_SUCCESS,
                 // payload: res.data[0]
-                payload: dataBud.data
+                payload: dataSave.data
             })
         } catch (error) {
 
@@ -344,18 +333,7 @@ export const updateBoudgetsActionn = (valor) => async (dispatch, getState) => {
         // const url = `http://localhost:3001/api/budgets/${id_user}`
 
         console.log(id_user, token)
-        // const dataBoudgets = await axios({
-        //     url: `http://localhost:3001/api/budgets/${id_user}?token=${token}`,
-        //     method: 'GET',
-        //     contentType: 'application/json',
 
-        //     success: function (response) {
-        //         // console.log(response);
-
-        //     }
-        // },
-        // );
-        // const dataBud = dataBoudgets.data;
         console.log(concept, amount, date, id_user, type)
         const dataBud = await axios({
             url: `http://localhost:3001/api/budgets/${id_budget}?token=${token}`,
@@ -392,8 +370,8 @@ export const updateBoudgetsActionn = (valor) => async (dispatch, getState) => {
 
 }
 
-export const deleteBoudgetsActionn = (valor) => async (dispatch, getState) => {
-    console.log(valor.id_budget, "hola que tal")
+export const deleteActionn = (valor) => async (dispatch, getState) => {
+    console.log(valor.id_action, "DELETE ")
 
 
 
@@ -409,8 +387,8 @@ export const deleteBoudgetsActionn = (valor) => async (dispatch, getState) => {
 
         console.log(id_user, token)
 
-        const dataBud = await axios({
-            url: `http://localhost:3001/api/budgets/${valor.id_budget}?token=${token}`,
+        const dataDelete = await axios({
+            url: `http://localhost:3001/api/stocks/${valor.id_action}?token=${token}`,
             method: 'DELETE',
             contentType: 'application/json',
             // data: JSON.stringify({ ...user}),
@@ -422,15 +400,15 @@ export const deleteBoudgetsActionn = (valor) => async (dispatch, getState) => {
             }
         });
 
-        console.log(dataBud)
+        console.log(dataDelete)
 
 
 
         try {
             dispatch({
-                type: BOUDGETS_UPDATE_SUCCESS,
+                type: ACTIONS_DELETE_SUCCESS,
                 // payload: res.data[0]
-                payload: dataBud.data
+                payload: dataDelete.data
             })
         } catch (error) {
 
@@ -462,6 +440,4 @@ export const deleteBoudgetsActionn = (valor) => async (dispatch, getState) => {
 
 
 
-
-//createBoudgetsActionn
 

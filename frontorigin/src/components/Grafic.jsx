@@ -3,7 +3,12 @@ import { useParams } from 'react-router-dom'
 import Navbar from './Navbar';
 import axios from 'axios';
 import { Checkbox, Row, Col } from 'antd';
-
+import Select from 'react-select'
+const options = [
+  { value: 1, label: '1 Minuto' },
+  { value: 5, label: '5 Minuto' },
+  { value: 15, label: '15 Minuto' }
+]
 
 
 const Grafic = (props) => {
@@ -87,6 +92,9 @@ const Grafic = (props) => {
       <input type="time" name="horainicial" id="timeprimary" onChange={resultData} />
       <input type="date" name="end_date" id="datesecondary" onChange={resultData} />
       <input type="time" name="horafinal" id="timesecondary" onChange={resultData} />
+      Intervalo
+      <Select options={options} defaultVAlue={"1 minuto"} />
+
 
     </div>
   )

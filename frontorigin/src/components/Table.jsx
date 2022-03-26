@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserActionn, showBoudgetsActionn } from '../features/Redux/stocksDucks'
+import { getUserActionn, showBoudgetsActionn, saveActionn } from '../features/Redux/stocksDucks'
 
 
 
@@ -59,6 +59,7 @@ const Table = () => {
 
     }
   ])
+  const [dataForSave, setDataForSave] = useState([])
 
   const [selectAuto, setSelectAuto] = useState()
   useEffect(() => {
@@ -131,7 +132,9 @@ const Table = () => {
 
   const handleChange = useCallback((inputValue) =>
     //    setValue(inputValue)
-    console.log(inputValue)
+    // console.log(inputValue)
+    setDataForSave(inputValue)
+
 
     , []);
 
@@ -163,7 +166,33 @@ const Table = () => {
 
 
 
+  const dataInitials = {
+    array: [],
+    id_action: "",
+    name_action: dataForSave.name,
+    symbol: dataForSave.symbol,
+    coin: dataForSave.currency,
+    id_user: "",
+    token: ""
 
+
+  }
+
+  const f = saveActionn(
+    dataInitials
+  )
+  const save = () => {
+    console.log(dataForSave, "esto viene en la 185")
+    console.log(dataInitials)
+    if (dataForSave === '{}') {
+      console.log("no tiene elementos")
+    } else {
+      console.log("si tiene elementos")
+      dispatch(f)
+    }
+
+
+  }
 
 
 
@@ -181,12 +210,15 @@ const Table = () => {
 
               <Col span={4}>
                 <Navbar />
-                <div className="btn btn-info">
+                <div className="btn btn-info"
+                  onClick={save}
+                >
                   agregar
                 </div>
-                <AsyncSelect cacheOptions loadOptions={loadOptions} onChange={handleChange} />
+                <AsyncSelect cacheOptions loadOptions={loadOptions}
+                  onChange={handleChange} />
               </Col>
-       
+
             </Row>
             <Tables con={stocks.array.con} />
 
