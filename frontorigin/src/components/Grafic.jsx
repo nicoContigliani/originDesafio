@@ -4,10 +4,15 @@ import Navbar from './Navbar';
 import axios from 'axios';
 import { Checkbox, Row, Col } from 'antd';
 import Select from 'react-select'
+import GrafictHooks from './grafics/GrafictHooks';
+import moment from 'moment';
+
+
+
 const options = [
-  { value: 1, label: '1 Minuto' },
-  { value: 5, label: '5 Minuto' },
-  { value: 15, label: '15 Minuto' }
+  { interval: '1min', label: '1 Minuto' },
+  { interval: '5min', label: '5 Minuto' },
+  { interval: '15min', label: '15 Minuto' }
 ]
 
 
@@ -15,6 +20,9 @@ const Grafic = (props) => {
   const { id } = useParams();
   const [data, setData] = useState([])
   const [dataForSend, setDataforSend] = useState({})
+  const [selectedOption, setSelectedOption] = useState(0);
+  const [history, setHistory] = useState(true)
+
 
 
   useEffect(() => {
@@ -27,10 +35,13 @@ const Grafic = (props) => {
 
 
   function onChange(checkedValues) {
-    console.log('checked = ', checkedValues);
+    console.log('checked = ', checkedValues[0]);
+    setHistory(false)
+
   }
   function onChange2(checkedValues) {
-    console.log('checked = ', checkedValues);
+    setHistory(true)
+    console.log('checked = ', checkedValues[0]);
   }
 
   const resultData = (e) => {
@@ -40,7 +51,81 @@ const Grafic = (props) => {
     })
   }
 
- console.log(dataForSend||"si")
+  console.log(dataForSend, "dataforsend esto es para enviar" || "si")
+  console.log(selectedOption, history)
+
+
+  if (history === true) {
+
+
+    if (dataForSend !== null) {
+      const apikey = "24cd58bee7e947968aa105119b8d87e5"
+      const link = `https://api.twelvedata.com/time_series`
+      const symbol = data.symbol
+      const interval = selectedOption.interval
+      const end_date = dataForSend?.end_date
+      const horafinal = dataForSend?.horafinal
+      const start_date = dataForSend?.start_date
+      const horainicial = dataForSend?.horainicial
+
+      const rutafinal = `${link}?symbol=${symbol}&interval=${interval}&start_date=${start_date}%${horainicial}&end_date=${end_date}%${horafinal}&apikey=${apikey}`
+      console.log(rutafinal,"esto esta en rutafinal")
+      console.log(horainicial,"esta es la hora inicial",typeof(horainicial))
+      const tiempo = moment().format('mm:hh')
+      console.log(tiempo)
+
+
+    } else {
+      console.log("campos incompletos")
+
+    }
+
+
+
+
+  } else {
+
+    if (dataForSend !== null) {
+      const apikey = "24cd58bee7e947968aa105119b8d87e5"
+      const link = `https://api.twelvedata.com/time_series`
+      const symbol = data.symbol
+      const interval = selectedOption.interval
+      const end_date = dataForSend?.end_date
+      const horafinal = dataForSend?.horafinal
+      const start_date = dataForSend?.start_date
+      const horainicial = dataForSend?.horainicial
+
+      const rutafinal = `${link}?symbol=${symbol}&interval=${interval}&apikey=${apikey}`
+      console.log(rutafinal,"esto esta en rutafinal tiempo real")
+
+    } else {
+      console.log("campos incompletos")
+
+    }
+
+
+
+
+
+  }
+
+
+
+
+
+  const estructure = () => {
+    //https://api.twelvedata.com/time_series?symbol=TSLA&interval=5min&start_date=2021-04-16%2009:48:00&end_date=2021-04-16%2019:48:00&apikey=24cd58bee7e947968aa105119b8d87e5
+
+
+
+
+
+  }
+
+
+
+
+
 
 
 
@@ -84,7 +169,7 @@ const Grafic = (props) => {
 
         <Row>
           <Col span={8}>
-            <Checkbox value="B"> Historico </Checkbox>
+            <Checkbox value="historico"> Historico </Checkbox>
           </Col>
         </Row>
       </Checkbox.Group>
@@ -93,8 +178,12 @@ const Grafic = (props) => {
       <input type="date" name="end_date" id="datesecondary" onChange={resultData} />
       <input type="time" name="horafinal" id="timesecondary" onChange={resultData} />
       Intervalo
-      <Select options={options} defaultVAlue={"1 minuto"} />
+      <Select options={options} defaultVAlue={"1 minuto"}
+        onChange={setSelectedOption}
 
+      />
+
+      <GrafictHooks />
 
     </div>
   )
